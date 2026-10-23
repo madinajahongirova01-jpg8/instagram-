@@ -1,0 +1,26 @@
+{
+  "name": "instagram-project",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "postinstall": "npm run build -w @insta/shared",
+    "build:shared": "npm run build -w @insta/shared",
+    "dev:api": "npm run start:dev -w @insta/api",
+    "dev:web": "npm run dev -w @insta/web",
+    "build": "npm run build -w @insta/shared && npm run build -w @insta/api && npm run build -w @insta/web",
+    "test": "npm run test -w @insta/api",
+    "test:e2e": "npm run test:e2e -w @insta/api",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:migrate": "npm run prisma:migrate -w @insta/api",
+    "db:generate": "npm run prisma:generate -w @insta/api",
+    "db:seed": "npm run db:seed -w @insta/api",
+    "db:seed:reset": "npm run db:seed:reset -w @insta/api"
+  }
+}

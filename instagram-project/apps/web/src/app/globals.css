@@ -1,0 +1,452 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.625rem;
+  --background: #ffffff;
+  --foreground: #0f0f14;
+  --card: #ffffff;
+  --card-foreground: #0f0f14;
+  --popover: #ffffff;
+  --popover-foreground: #0f0f14;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --secondary: #f2f2f5;
+  --secondary-foreground: #18181b;
+  --muted: #f2f2f5;
+  --muted-foreground: #737380;
+  --accent: #f2f2f5;
+  --accent-foreground: #18181b;
+  --destructive: #e5263f;
+  --success: #16a34a;
+  --border: #ececf0;
+  --input: #e4e4ea;
+  --ring: #b4b4c0;
+
+  --surface: #f2f2f5;
+  --surface-border: transparent;
+  --panel: transparent;
+  --panel-border: transparent;
+  --panel-shadow: none;
+  --post: #ffffff;
+  --post-border: #f0f0f3;
+  --post-shadow: 0 1px 3px rgb(15 15 20 / 0.06), 0 6px 24px rgb(15 15 20 / 0.04);
+  --sidebar: #ffffff;
+  --sidebar-border: #efeff2;
+  --link: #0a6fd6;
+  --see-all: #0095f6;
+  --badge: #ff3040;
+  --badge-foreground: #ffffff;
+  --online: #22c55e;
+  --offline: #a1a1aa;
+  --like: #ff3040;
+  --verified: #0095f6;
+  --dot: #d4d4dc;
+  --dot-active: #0095f6;
+  --overlay: rgb(15 15 20 / 0.55);
+  --overlay-foreground: #ffffff;
+  --story-seen: #d4d4dc;
+  --nav-hover: #f5f5f7;
+  --nav-active-fg: #e1306c;
+  --nav-active-bg: linear-gradient(90deg, #fde8f0 0%, #fcf0f6 100%);
+  --follow-fg: #ffffff;
+  --follow-fill: #0095f6;
+  --follow-border: linear-gradient(#0095f6, #0095f6);
+  --following-fg: #18181b;
+  --following-fill: #efeff2;
+  --edit-fg: #18181b;
+  --edit-bg: #f2f2f5;
+  --bubble-own: linear-gradient(135deg, #3797f0, #2f7fe0);
+  --bubble-own-fg: #ffffff;
+  --brand-gradient: linear-gradient(90deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
+  --story-ring: conic-gradient(from 210deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75);
+  --promo-bg: linear-gradient(160deg, #ff8a3d 0%, #ff4f7b 45%, #c43ad8 100%);
+  --promo-foreground: #ffffff;
+  --promo-button: #ffffff;
+  --promo-button-foreground: #e1306c;
+  --app-backdrop: #ffffff;
+
+  --hero-bg: linear-gradient(160deg, #e95b8f 0%, #e2457f 40%, #c04aa4 75%, #a24fb3 100%);
+  --hero-glow: radial-gradient(circle at 85% 5%, rgb(253 200 120 / 0.55), transparent 45%);
+  --hero-bubble: linear-gradient(145deg, #f6b145 0%, #ee2a7b 55%, #a43ab6 100%);
+  --hero-badge: linear-gradient(145deg, #fbd16b 0%, #f2655a 35%, #e2307f 60%, #a43ab6 100%);
+  --hero-base: linear-gradient(90deg, #f3c26a, #e5578c, #a956b8);
+  --hero-foreground: #ffffff;
+}
+
+.dark {
+  --background: #0c0a1d;
+  --foreground: #f4f2ff;
+  --card: #16132c;
+  --card-foreground: #f4f2ff;
+  --popover: #1a1633;
+  --popover-foreground: #f4f2ff;
+  --primary: #f4f2ff;
+  --primary-foreground: #14112a;
+  --secondary: rgb(255 255 255 / 0.08);
+  --secondary-foreground: #f4f2ff;
+  --muted: rgb(255 255 255 / 0.07);
+  --muted-foreground: #9d98bb;
+  --accent: rgb(255 255 255 / 0.08);
+  --accent-foreground: #f4f2ff;
+  --destructive: #ff4d6a;
+  --success: #34d399;
+  --border: rgb(255 255 255 / 0.08);
+  --input: rgb(255 255 255 / 0.12);
+  --ring: rgb(196 140 255 / 0.6);
+
+  --surface: rgb(255 255 255 / 0.05);
+  --surface-border: rgb(255 255 255 / 0.1);
+  --panel: rgb(22 19 46 / 0.72);
+  --panel-border: rgb(255 255 255 / 0.06);
+  --panel-shadow: 0 10px 40px rgb(0 0 0 / 0.25);
+  --post: rgb(24 21 50 / 0.75);
+  --post-border: rgb(255 255 255 / 0.06);
+  --post-shadow: 0 10px 40px rgb(0 0 0 / 0.25);
+  --sidebar: rgb(18 15 38 / 0.8);
+  --sidebar-border: rgb(255 255 255 / 0.06);
+  --link: #a98bff;
+  --see-all: #9b87ff;
+  --badge: #f2456b;
+  --badge-foreground: #ffffff;
+  --online: #22c55e;
+  --offline: #6b6788;
+  --like: #ff3b5c;
+  --verified: #3b9bff;
+  --dot: rgb(255 255 255 / 0.3);
+  --dot-active: #ff4f8b;
+  --overlay: rgb(10 8 24 / 0.6);
+  --overlay-foreground: #ffffff;
+  --story-seen: rgb(255 255 255 / 0.22);
+  --nav-hover: rgb(255 255 255 / 0.05);
+  --nav-active-fg: #ffffff;
+  --nav-active-bg: linear-gradient(90deg, #f0507a 0%, #b445d4 60%, #8a46e6 100%);
+  --follow-fg: #ffffff;
+  --follow-fill: #15122b;
+  --follow-border: linear-gradient(90deg, #ff4f8b, #9b5cff);
+  --following-fg: #f4f2ff;
+  --following-fill: rgb(255 255 255 / 0.08);
+  --edit-fg: #ffffff;
+  --edit-bg: linear-gradient(90deg, #ff5a7a 0%, #c54bd2 55%, #7f4cf0 100%);
+  --bubble-own: linear-gradient(135deg, #f0507a 0%, #8a46e6 100%);
+  --bubble-own-fg: #ffffff;
+  --brand-gradient: linear-gradient(90deg, #ffb347 0%, #ff4f8b 45%, #a855f7 100%);
+  --story-ring: conic-gradient(from 210deg, #ffb347, #ff4f8b, #b14fe0, #6d5dfc, #ff4f8b, #ffb347);
+  --promo-bg: linear-gradient(155deg, #c43a8f 0%, #8f3cc9 55%, #6a3ae0 100%);
+  --promo-foreground: #ffffff;
+  --promo-button: #ffffff;
+  --promo-button-foreground: #6a2bd8;
+  --app-backdrop: radial-gradient(1200px 700px at 0% 0%, rgb(112 52 160 / 0.35), transparent 60%),
+    radial-gradient(1000px 700px at 100% 100%, rgb(67 56 202 / 0.3), transparent 60%),
+    linear-gradient(180deg, #0f0b24 0%, #0b0a1d 100%);
+}
+
+@theme inline {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-logo: var(--font-logo-face), cursive;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --color-surface-border: var(--surface-border);
+  --color-panel: var(--panel);
+  --color-panel-border: var(--panel-border);
+  --color-post: var(--post);
+  --color-post-border: var(--post-border);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-link: var(--link);
+  --color-see-all: var(--see-all);
+  --color-badge: var(--badge);
+  --color-badge-foreground: var(--badge-foreground);
+  --color-online: var(--online);
+  --color-offline: var(--offline);
+  --color-like: var(--like);
+  --color-verified: var(--verified);
+  --color-dot: var(--dot);
+  --color-dot-active: var(--dot-active);
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
+  --color-story-seen: var(--story-seen);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-active-fg: var(--nav-active-fg);
+  --color-follow-fg: var(--follow-fg);
+  --color-following-fg: var(--following-fg);
+  --color-following-fill: var(--following-fill);
+  --color-edit-fg: var(--edit-fg);
+  --color-promo-foreground: var(--promo-foreground);
+  --color-promo-button: var(--promo-button);
+  --color-promo-button-foreground: var(--promo-button-foreground);
+  --color-hero-foreground: var(--hero-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@utility app-backdrop {
+  background: var(--app-backdrop);
+  background-attachment: fixed;
+}
+
+@utility panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+}
+
+@utility post-card {
+  background: var(--post);
+  border: 1px solid var(--post-border);
+  box-shadow: var(--post-shadow);
+}
+
+@utility nav-active {
+  background: var(--nav-active-bg);
+  color: var(--nav-active-fg);
+}
+
+@utility btn-follow {
+  color: var(--follow-fg);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--follow-fill), var(--follow-fill)) padding-box,
+    var(--follow-border) border-box;
+}
+
+@utility bubble-own {
+  color: var(--bubble-own-fg);
+  background: var(--bubble-own);
+}
+
+@utility btn-edit {
+  color: var(--edit-fg);
+  background: var(--edit-bg);
+}
+
+@utility text-brand-gradient {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility story-ring {
+  background: var(--story-ring);
+}
+
+@utility hero-glow {
+  background: var(--hero-glow);
+}
+
+@utility promo-card {
+  background: var(--promo-bg);
+  color: var(--promo-foreground);
+}
+
+@utility hero-bg {
+  background: var(--hero-bg);
+}
+
+@utility hero-bubble {
+  background: var(--hero-bubble);
+}
+
+@utility hero-badge {
+  background: var(--hero-badge);
+}
+
+@utility hero-base {
+  background: var(--hero-base);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@theme {
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-heart-burst: heart-burst 800ms var(--ease-spring) forwards;
+  --animate-like-pop: like-pop 400ms var(--ease-spring);
+  --animate-bookmark-pop: bookmark-pop 350ms var(--ease-spring);
+  --animate-count-up: count-up 250ms ease-out;
+  --animate-fade-up: fade-up 400ms ease-out both;
+  --animate-fade-in: fade-in 200ms ease-out both;
+  --animate-menu-in: menu-in 180ms var(--ease-spring) both;
+  --animate-menu-out: menu-out 150ms ease-in both;
+  --animate-overlay-in: fade-in 180ms ease-out both;
+  --animate-overlay-out: fade-out 150ms ease-in both;
+  --animate-badge-pulse: badge-pulse 400ms var(--ease-spring);
+  --animate-msg-in: msg-in 250ms ease-out both;
+  --animate-pop-in: pop-in 300ms var(--ease-spring) both;
+  --animate-reaction-bounce: reaction-bounce 400ms var(--ease-spring);
+  --animate-typing-dot: typing-dot 1s ease-in-out infinite;
+  --animate-story-open: story-open 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-story-spin: story-spin 6s linear infinite;
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+  --animate-hero-drift: hero-drift 14s ease-in-out infinite alternate;
+
+  @keyframes heart-burst {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+    15% { opacity: 0.95; transform: translate(-50%, -50%) scale(1.2); }
+    30% { transform: translate(-50%, -50%) scale(0.95); }
+    45%, 80% { opacity: 0.95; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  }
+  @keyframes like-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.3); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+  @keyframes bookmark-pop {
+    0% { transform: scale(1); }
+    35% { transform: scale(0.75); }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  @keyframes count-up {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @keyframes menu-in {
+    from { opacity: 0; transform: scale(0.92) translateY(-4px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes menu-out {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+  }
+  @keyframes badge-pulse {
+    0% { transform: scale(1); }
+    45% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: scale(0.5) translateY(6px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes reaction-bounce {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.45) translateY(-4px); }
+    100% { transform: scale(1); }
+  }
+  @keyframes typing-dot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+  @keyframes story-open {
+    from { opacity: 0; transform: scale(0.25); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes story-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+  @keyframes hero-drift {
+    from { transform: translate(-12%, -8%) rotate(0deg); }
+    to { transform: translate(10%, 12%) rotate(25deg); }
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 400ms ease-out,
+    transform 400ms ease-out;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    color 300ms ease,
+    fill 300ms ease,
+    stroke 300ms ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
