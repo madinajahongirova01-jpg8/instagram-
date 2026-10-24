@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { io, Socket } from 'socket.io-client';
 import type { AddressInfo } from 'node:net';
-import { RealtimeEvents } from '@insta/shared';
+import { RealtimeEvents, type CallOfferEvent, type CallRejectEvent } from '@insta/shared';
 import { auth, createTestApp, registerUser, resetDatabase, TestContext, TestUser } from './utils';
 
 function connect(url: string, token?: string): Socket {
@@ -113,14 +113,27 @@ describe('Realtime (e2e)', () => {
     const bobSocket = track(connect(url, bob.token));
     await Promise.all([connected(aliceSocket), connected(bobSocket)]);
 
-    const offer = waitFor<{ fromUserId: string; callType: string; sdp: string }>(bobSocket, RealtimeEvents.CallOffer);
+    const offer = waitFor<CallOfferEvent>(bobSocket, RealtimeEvents.CallOffer);
     const ack = await aliceSocket.emitWithAck(RealtimeEvents.CallOffer, { toUserId: bob.id, callType: 'VIDEO', sdp: 'v=0' });
     expect(ack).toEqual({ ok: true });
-    expect(await offer).toEqual({ fromUserId: alice.id, callType: 'VIDEO', sdp: 'v=0' });
+    expect(await offer).toEqual({
+      fromUserId: alice.id,
+      from: expect.objectContaining({ id: alice.id, username: alice.username }),
+      callType: 'VIDEO',
+      sdp: 'v=0',
+    });
 
     const answer = waitFor<{ fromUserId: string }>(aliceSocket, RealtimeEvents.CallAnswer);
     await bobSocket.emitWithAck(RealtimeEvents.CallAnswer, { toUserId: alice.id, sdp: 'v=0' });
     expect(await answer).toMatchObject({ fromUserId: bob.id });
+
+    const rejected = waitFor<CallRejectEvent>(aliceSocket, RealtimeEvents.CallReject);
+    await bobSocket.emitWithAck(RealtimeEvents.CallReject, { toUserId: alice.id });
+    expect(await rejected).toEqual({ fromUserId: bob.id, reason: 'REJECTED' });
+
+    const busy = waitFor<CallRejectEvent>(aliceSocket, RealtimeEvents.CallReject);
+    await bobSocket.emitWithAck(RealtimeEvents.CallReject, { toUserId: alice.id, reason: 'BUSY' });
+    expect(await busy).toEqual({ fromUserId: bob.id, reason: 'BUSY' });
 
     const offline = await aliceSocket.emitWithAck(RealtimeEvents.CallOffer, {
       toUserId: '00000000-0000-4000-8000-000000000000',

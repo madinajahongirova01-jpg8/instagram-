@@ -14,6 +14,7 @@ import {
   type TypingPayloadDto,
 } from '@insta/shared';
 import { Link } from '@/i18n/navigation';
+import { CallButtons } from '@/components/calls/call-buttons';
 import { Avatar } from '@/components/profile/avatar';
 import { ErrorState, Spinner } from '@/components/ui/states';
 import { mediaUrl } from '@/lib/config';
@@ -199,6 +200,7 @@ function ChatHeader({ conversation, myId }: { conversation: ConversationDto; myI
           {conversation.isGroup ? null : <PresenceLine userId={peer.id} />}
         </span>
       </Link>
+      {conversation.isGroup ? null : <CallButtons peer={peer} />}
     </header>
   );
 }
