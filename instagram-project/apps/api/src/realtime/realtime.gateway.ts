@@ -10,14 +10,15 @@ import {
   WsException,
 } from '@nestjs/websockets';
 import type { Server, Socket } from 'socket.io';
-import { RealtimeEvents } from '@insta/shared';
+import { RealtimeEvents, type RealtimeAck } from '@insta/shared';
+import { DtoMapper, userSummarySelect } from '../common/mappers/dto-mapper.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { MessagesService } from '../messages/messages.service';
 import { VisibilityService } from '../privacy/visibility.service';
 import { extractBearer } from '../common/guards/jwt-auth.guard';
 import { RealtimeService, userRoom } from './realtime.service';
-import { CallAnswerDto, CallIceDto, CallOfferDto, CallTargetDto, ConversationEventDto } from './dto/realtime.dto';
+import { CallAnswerDto, CallIceDto, CallOfferDto, CallRejectDto, CallTargetDto, ConversationEventDto } from './dto/realtime.dto';
 
 interface SocketData {
   userId?: string;
@@ -25,10 +26,7 @@ interface SocketData {
 
 type AppSocket = Socket<Record<string, never>, Record<string, never>, Record<string, never>, SocketData>;
 
-interface Ack {
-  ok: boolean;
-  error?: string;
-}
+type Ack = RealtimeAck;
 
 @WebSocketGateway()
 @UsePipes(
@@ -47,6 +45,7 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
     private readonly messages: MessagesService,
     private readonly visibility: VisibilityService,
     private readonly prisma: PrismaService,
+    private readonly mapper: DtoMapper,
   ) {}
 
   afterInit(server: Server): void {
@@ -106,8 +105,18 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
   }
 
   @SubscribeMessage(RealtimeEvents.CallOffer)
-  callOffer(@ConnectedSocket() client: AppSocket, @MessageBody() body: CallOfferDto): Promise<Ack> {
-    return this.relay(client, body.toUserId, RealtimeEvents.CallOffer, { callType: body.callType, sdp: body.sdp }, true);
+  async callOffer(@ConnectedSocket() client: AppSocket, @MessageBody() body: CallOfferDto): Promise<Ack> {
+    const caller = await this.prisma.user.findUnique({ where: { id: this.userId(client) }, select: userSummarySelect });
+    if (!caller) {
+      return { ok: false, error: 'Unauthorized' };
+    }
+    return this.relay(
+      client,
+      body.toUserId,
+      RealtimeEvents.CallOffer,
+      { from: this.mapper.user(caller), callType: body.callType, sdp: body.sdp },
+      true,
+    );
   }
 
   @SubscribeMessage(RealtimeEvents.CallAnswer)
@@ -121,8 +130,8 @@ export class RealtimeGateway implements OnGatewayInit, OnGatewayConnection, OnGa
   }
 
   @SubscribeMessage(RealtimeEvents.CallReject)
-  callReject(@ConnectedSocket() client: AppSocket, @MessageBody() body: CallTargetDto): Promise<Ack> {
-    return this.relay(client, body.toUserId, RealtimeEvents.CallReject, {});
+  callReject(@ConnectedSocket() client: AppSocket, @MessageBody() body: CallRejectDto): Promise<Ack> {
+    return this.relay(client, body.toUserId, RealtimeEvents.CallReject, { reason: body.reason ?? 'REJECTED' });
   }
 
   @SubscribeMessage(RealtimeEvents.CallEnd)

@@ -1,5 +1,20 @@
 # PROGRESS
 
+## 2026-10-24 — Аудио- и видеозвонки 1:1 (WebRTC)
+
+- Backend: сигналинг уже был; добавлено только `from` (`UserSummary` звонящего, берётся сервером из БД) в `call:offer` и необязательный `reason: REJECTED|BUSY` в `call:reject`. Остальные события и проверки (блокировки, `allowDirectMessages`, офлайн) не менялись.
+- Shared: типы входящих событий `CallOfferEvent`, `CallAnswerEvent`, `CallIceEvent`, `CallRejectEvent`, `CallEndEvent`, `CallRejectPayload`, `RealtimeAck`.
+- Frontend: `components/calls` — `CallProvider` (одно соединение на всё приложение, входящий звонок виден на любой странице), кнопки 📞 и 🎥 в шапке личного чата, окно входящего звонка (аудио/видео), экран звонка (видео собеседника на весь экран, своё видео — маленькое перетаскиваемое окно, зеркальное и без звука, таймер, микрофон, камера, завершить), аватар вместо видео, когда собеседник выключил камеру. Ошибки: нет доступа к камере/микрофону, камера занята, устройства нет, пользователь офлайн, занят, отклонил, не ответил, запретил звонки, связь прервалась; если камера недоступна — «Продолжить как аудиозвонок». `emitSocketWithAck` в `lib/socket.ts`. Тексты en/ru/tg (раздел `calls`).
+- Для e2e создана локальная БД `instagram_test` и `apps/api/.env.test`.
+
+| Проверка | Команда | Результат |
+|---|---|---|
+| Типы shared / api / web | `npm run build:shared`, `npm run typecheck -w @insta/api`, `npm run typecheck -w @insta/web` | 0 ошибок |
+| Unit-тесты | `npm test` | 7 наборов, 47 тестов пройдено |
+| E2E API | `npm run test:e2e` | 5 наборов, 75 тестов пройдено (realtime: проверка `from` и `reason`) |
+| Dev-сервер | `GET /messages`, `GET /` | 200, страницы компилируются |
+| Звонок в браузере двумя пользователями | — | **не проверено** (нужны два браузера с камерой) |
+
 ## 2026-10-23 — Демо-данные
 
 - `npm run db:seed` / `npm run db:seed:reset` (из корня и из `apps/api`): `apps/api/prisma/seed.ts` поднимает Nest-контекст и создаёт данные через сервисы проекта (`MediaService.upload`, `PostsService`, `ReelsService`, `StoriesService`, `FollowsService`, `LikesService`, `CommentsService`, `ProfilesService`, `PrivacyService`). 6 демо-пользователей (`@demo.insta.local`, пароль `Demo12345`), один закрытый; подписки между ними и с `pwcheck_*`; посты (карусели 2–5 фото), reels из `seed-media/videos`, свежие stories, лайки и комментарии. Повторный запуск не создаёт дубликатов; reset удаляет только пользователей `@demo.insta.local` и их файлы. Без фото рисуются пейзажи, без видео — понятное сообщение. Папка `apps/api/prisma/seed-media` в .gitignore (кроме README).
@@ -57,7 +72,7 @@
 
 ### Не сделано (в ROADMAP)
 
-- Звонки WebRTC во frontend (backend-сигналинг готов). Не начаты, чтобы не оставлять половину.
+- Звонки WebRTC во frontend (backend-сигналинг готов). Не начаты, чтобы не оставлять половину. (Сделано 2026-10-24.)
 - Групповые чаты и «поделиться постом» во frontend, лайки и ответы на комментарии во frontend, кнопка «Подписаться» в результатах поиска, отдельная страница reel.
 
 ## 2026-10-23 — Этап 6.2: темы и общий layout (ADR-011)

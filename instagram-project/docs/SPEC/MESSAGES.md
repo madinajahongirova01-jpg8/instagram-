@@ -23,7 +23,9 @@
 | PUT | `/api/messages/:id/reaction` | Поставить/заменить реакцию → `message:reaction` |
 | DELETE | `/api/messages/:id/reaction` | Убрать реакцию |
 
-Socket.io (`auth: { token }`): `typing:start|stop {conversationId}`, `conversation:read`, `call:offer {toUserId, callType: VOICE|VIDEO, sdp}`, `call:answer {toUserId, sdp}`, `call:ice-candidate {toUserId, candidate}`, `call:reject|end {toUserId}`.
+Socket.io (`auth: { token }`): `typing:start|stop {conversationId}`, `conversation:read`, `call:offer {toUserId, callType: VOICE|VIDEO, sdp}`, `call:answer {toUserId, sdp}`, `call:ice-candidate {toUserId, candidate}`, `call:reject {toUserId, reason?: REJECTED|BUSY}`, `call:end {toUserId}`. На каждое событие звонка сервер отвечает ack `{ok, error?}` (`User is offline`, `User is not available`, `User does not accept calls from you`). Получатель видит `fromUserId` из токена; в `call:offer` сервер добавляет `from` — `UserSummary` звонящего (имя и аватар для окна входящего звонка), в `call:reject` — `reason` (по умолчанию `REJECTED`). Типы событий — `packages/shared/src/realtime.ts`.
+
+Звонки во frontend (`apps/web/src/components/calls`): WebRTC 1:1, публичный STUN Google, без TURN (работает на localhost и в одной сети). Состояние микрофона и камеры собеседника передаётся по `RTCDataChannel` `control` — сервер его не видит. Занятый пользователь автоматически отвечает `call:reject {reason: BUSY}`; без ответа 45 с — `call:end`.
 
 ## Приватность (ADR-012)
 

@@ -1,3 +1,5 @@
+import type { UserSummary } from './types';
+
 export const RealtimeEvents = {
   TypingStart: 'typing:start',
   TypingStop: 'typing:stop',
@@ -39,6 +41,45 @@ export interface CallIcePayload {
 
 export interface CallTargetPayload {
   toUserId: string;
+}
+
+export const CALL_REJECT_REASONS = ['REJECTED', 'BUSY'] as const;
+
+export type CallRejectReason = (typeof CALL_REJECT_REASONS)[number];
+
+export interface CallRejectPayload extends CallTargetPayload {
+  reason?: CallRejectReason;
+}
+
+export interface RealtimeAck {
+  ok: boolean;
+  error?: string;
+}
+
+export interface CallOfferEvent {
+  fromUserId: string;
+  from: UserSummary;
+  callType: CallType;
+  sdp: string;
+}
+
+export interface CallAnswerEvent {
+  fromUserId: string;
+  sdp: string;
+}
+
+export interface CallIceEvent {
+  fromUserId: string;
+  candidate: string;
+}
+
+export interface CallRejectEvent {
+  fromUserId: string;
+  reason: CallRejectReason;
+}
+
+export interface CallEndEvent {
+  fromUserId: string;
 }
 
 export interface TypingPayload {

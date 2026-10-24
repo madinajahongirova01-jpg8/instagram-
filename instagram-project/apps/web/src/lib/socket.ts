@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { io, type Socket } from 'socket.io-client';
+import type { RealtimeAck } from '@insta/shared';
 import { API_ORIGIN } from './config';
 
 type Handler = (payload: unknown) => void;
@@ -30,6 +31,17 @@ export function disconnectSocket(): void {
 
 export function emitSocket(event: string, payload: unknown): void {
   socket?.emit(event, payload);
+}
+
+export async function emitSocketWithAck(event: string, payload: unknown, timeoutMs = 10_000): Promise<RealtimeAck> {
+  if (!socket?.connected) {
+    return { ok: false, error: 'Not connected' };
+  }
+  try {
+    return (await socket.timeout(timeoutMs).emitWithAck(event, payload)) as RealtimeAck;
+  } catch {
+    return { ok: false, error: 'Timeout' };
+  }
 }
 
 export function onSocket(event: string, handler: Handler): () => void {

@@ -1,5 +1,5 @@
-import { IsIn, IsString, IsUUID, MaxLength } from 'class-validator';
-import type { CallType } from '@insta/shared';
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength } from 'class-validator';
+import { CALL_REJECT_REASONS, type CallRejectReason, type CallType } from '@insta/shared';
 
 export class ConversationEventDto {
   @IsUUID()
@@ -9,6 +9,12 @@ export class ConversationEventDto {
 export class CallTargetDto {
   @IsUUID()
   toUserId: string;
+}
+
+export class CallRejectDto extends CallTargetDto {
+  @IsOptional()
+  @IsIn(CALL_REJECT_REASONS)
+  reason?: CallRejectReason;
 }
 
 export class CallOfferDto extends CallTargetDto {
